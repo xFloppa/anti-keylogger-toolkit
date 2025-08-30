@@ -22,13 +22,18 @@ Toolkit didattico in **Python** per:
 
 ## 📂 Struttura del progetto
 anti-keylogger-toolkit/
-│── README.md # Documentazione principale
-│── requirements.txt # Dipendenze Python
-│── demo_safe_input/
-│ └─ app_demo.py # Demo sicura di keylogger (solo finestra)
-│── scanner/
-│ ├─ scan_processes.py # Scanner processi attivi
-│ └─ make_report.py # (in sviluppo) Generazione report
+├── README.md # Documentazione principale
+├── LICENSE # Licenza MIT
+├── requirements.txt # Dipendenze Python
+├── .gitignore # File per ignorare cartelle/files locali
+├── demo_safe_input/ # Demo sicura di keylogger interno
+│ └── app_demo.py # Finestra Tkinter che registra input solo nella GUI
+├── scanner/ # Scanner processi e tool difensivi
+│ └── scan_processes.py # Script di scansione dei processi attivi
+├── tests/ # Test del progetto
+│ └── test_scanner.py # Test per scanner
+└── docs/ # Documentazione extra
+└── architecture.md # Architettura e spiegazioni tecniche
 
 ---
 
