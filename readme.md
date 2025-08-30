@@ -23,18 +23,26 @@ Toolkit didattico in **Python** per:
 ## 📂 Struttura del progetto
 ```
 anti-keylogger-toolkit/
-├── README.md # Documentazione principale
-├── LICENSE # Licenza MIT
-├── requirements.txt # Dipendenze Python
-├── .gitignore # File per ignorare cartelle/files locali
-├── demo_safe_input/ # Demo sicura di keylogger interno
-│ └── app_demo.py # Finestra Tkinter che registra input solo nella GUI
-├── scanner/ # Scanner processi e tool difensivi
-│ └── scan_processes.py # Script di scansione dei processi attivi
-├── tests/ # Test del progetto
-│ └── test_scanner.py # Test per scanner
-└── docs/ # Documentazione extra
-└── architecture.md # Architettura e spiegazioni tecniche
+├── README.md                # Documentazione principale del progetto
+├── LICENSE                  # Licenza MIT
+├── requirements.txt         # Dipendenze Python
+├── .gitignore               # File per ignorare cartelle/files locali
+├── demo_safe_input/         # Demo sicura di keylogger interno
+│   ├── README.md            # Spiegazione su come funziona la demo e come lanciarla
+│   └── app_demo.py          # Finestra Tkinter che registra input solo nella GUI
+├── scanner/                 # Scanner processi e tool difensivi
+│   ├── README.md            # Guida su come usare lo scanner e le funzionalità principali
+│   ├── scanner_core.py      # Core dello scanner (analisi processi, IOC)
+│   ├── scanner_gui/         # GUI dello scanner
+│   │   ├── scanner_gui.py   # Interfaccia Tkinter completa
+│   │   └── README.md        # Spiegazione dei pulsanti e della struttura della GUI
+│   └── scan_processes.py    # Script di scansione dei processi attivi
+├── tests/                   # Test del progetto
+│   ├── README.md            # Come eseguire i test
+│   └── test_scanner.py      # Test per scanner
+└── docs/                    # Documentazione extra
+    ├── README.md            # Descrizione dei documenti
+    └── architecture.md      # Architettura e spiegazioni tecniche
 ```
 
 ---
