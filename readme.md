@@ -5,7 +5,7 @@ Toolkit didattico in **Python** per:
 - Creare strumenti di difesa che analizzano processi e comportamenti sospetti.
 
 ## 📂 Struttura del progetto
-_ nothing _
+_nothing_
 
 ## 🚀 Uso
 1. Clona la repo
