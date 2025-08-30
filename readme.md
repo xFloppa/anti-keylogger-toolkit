@@ -21,6 +21,7 @@ Toolkit didattico in **Python** per:
 ---
 
 ## 📂 Struttura del progetto
+```
 anti-keylogger-toolkit/
 ├── README.md # Documentazione principale
 ├── LICENSE # Licenza MIT
@@ -34,6 +35,7 @@ anti-keylogger-toolkit/
 │ └── test_scanner.py # Test per scanner
 └── docs/ # Documentazione extra
 └── architecture.md # Architettura e spiegazioni tecniche
+```
 
 ---
 
