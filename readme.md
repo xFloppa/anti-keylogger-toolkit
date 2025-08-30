@@ -57,7 +57,10 @@ anti-keylogger-toolkit/
    python scanner/scan_processes.py
    ```
 
-##⚖️ Disclaimer
+## ⚖️ Disclaimer
 Questo progetto è puramente didattico e difensivo.
 Non intercetta input globali, non gira in background e non ha scopi malevoli.
 Utilizzare solo su macchine di test o con consenso esplicito.
+
+## 📄 Licenza
+Distribuito sotto MIT License.
