@@ -17,7 +17,7 @@ SPECIAL_KEYS = {
 class KeyLoggerDemo:
     def __init__(self, root):
         self.root = root
-        self.root.title("Demo Sicura Keylogger (solo finestra)")
+        self.root.title("Demo Sicura Keylogger")
         self.text = tk.Text(root, width=60, height=20)
         self.text.pack()
         self.log = []
@@ -26,25 +26,23 @@ class KeyLoggerDemo:
         self.save_btn.pack(pady=5)
 
     def on_key_press(self, event):
-        # Determina se è tasto stampabile o speciale
+        # Determina se è tasto speciale o normale
         if event.keysym in SPECIAL_KEYS:
             key = SPECIAL_KEYS[event.keysym]
+            display = f"({key})"
         elif event.char and event.char.isprintable():
             key = event.char
+            display = key
         else:
-            return  # ignora altri tasti invisibili
+            return  # ignora tasti non stampabili
 
-        # Evita duplicazioni: inseriamo solo una volta
-        if self.log and self.log[-1]['key'] == key:
-            return
-
-        timestamp = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
-        self.log.append({'time': timestamp, 'key': key})
-
-        # Inserisci nella finestra
-        display = f"[{timestamp}] {key}\n"
+        # Inserisci nella finestra solo la rappresentazione visuale
         self.text.insert(tk.END, display)
         self.text.see(tk.END)
+
+        # Registra nel log con timestamp
+        timestamp = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
+        self.log.append({'time': timestamp, 'key': key})
 
     def save_log(self):
         filename = f"demo_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
