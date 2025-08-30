@@ -1,11 +1,14 @@
 import tkinter as tk
+from tkinter import messagebox
 from datetime import datetime
 import os
 import html
 
-LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs/demo_logs")
+# --- Configurazione cartelle ---
+LOG_DIR = os.path.join(os.path.dirname(__file__), "logs/demo_logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
+# --- Mappatura tasti speciali ---
 SPECIAL_KEYS = {
     "Control_L": "Ctrl", "Control_R": "Ctrl",
     "Shift_L": "Shift", "Shift_R": "Shift",
@@ -18,15 +21,49 @@ class KeyLoggerDemo:
     def __init__(self, root):
         self.root = root
         self.root.title("Demo Sicura Keylogger")
-        self.text = tk.Text(root, width=60, height=20)
-        self.text.pack()
+        self.root.geometry("850x650")
+        self.root.configure(bg="#1B1B2F")
+        # Icona finestra (puoi sostituire con un file .ico a tua scelta)
+        # self.root.iconbitmap("icon.ico")
+
         self.log = []
-        self.root.bind("<Key>", self.on_key_press)
-        self.save_btn = tk.Button(root, text="Salva Log HTML", command=self.save_log)
-        self.save_btn.pack(pady=5)
+
+        # Text widget tipo Notepad
+        self.text = tk.Text(root, bg="#1B1B2F", fg="#E0E0E0", insertbackground="#00C9A7",
+                            font=("Consolas", 12), wrap=tk.WORD)
+        self.text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        self.text.bind("<Key>", self.on_key_press)
+
+        # Frame pulsanti
+        button_frame = tk.Frame(root, bg="#1B1B2F")
+        button_frame.pack(fill=tk.X, pady=(0,10))
+
+        self.save_btn = tk.Button(button_frame, text="💾 Salva Log", command=self.save_log,
+                                  bg="#00C9A7", fg="#1B1B2F", font=("Arial", 10, "bold"),
+                                  relief=tk.FLAT, padx=10, pady=5)
+        self.save_btn.pack(side=tk.LEFT, padx=10)
+
+        self.clear_btn = tk.Button(button_frame, text="🧹 Cancella", command=self.clear_text,
+                                   bg="#FF4C4C", fg="#1B1B2F", font=("Arial", 10, "bold"),
+                                   relief=tk.FLAT, padx=10, pady=5)
+        self.clear_btn.pack(side=tk.LEFT, padx=10)
+
+        self.close_btn = tk.Button(button_frame, text="❌ Chiudi", command=self.on_close,
+                           bg="#FFAA00", fg="#1B1B2F", font=("Arial", 10, "bold"),
+                           relief=tk.FLAT, padx=10, pady=5)
+        self.close_btn.pack(side=tk.LEFT, padx=10)
+
+
+        # Firma in basso
+        self.signature = tk.Label(root, text="- xFloppa", bg="#1B1B2F", fg="#00C9A7",
+                                  font=("Arial", 10, "italic"))
+        self.signature.pack(side=tk.BOTTOM, pady=5)
+
+        # Salvataggio automatico alla chiusura
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def on_key_press(self, event):
-        # Determina se è tasto speciale o normale
+        # Determina tasto speciale o normale
         if event.keysym in SPECIAL_KEYS:
             key = SPECIAL_KEYS[event.keysym]
             display = f"({key})"
@@ -34,17 +71,23 @@ class KeyLoggerDemo:
             key = event.char
             display = key
         else:
-            return  # ignora tasti non stampabili
+            return "break"  # Blocca tasti non stampabili
 
-        # Inserisci nella finestra solo la rappresentazione visuale
+        # Inserisci solo display
         self.text.insert(tk.END, display)
         self.text.see(tk.END)
 
-        # Registra nel log con timestamp
+        # Registra con timestamp
         timestamp = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
         self.log.append({'time': timestamp, 'key': key})
 
+        return "break"  # Impedisce al Text widget di inserire automaticamente il carattere
+
     def save_log(self):
+        if not self.log:
+            messagebox.showinfo("Info", "Nessun tasto da salvare!")
+            return
+
         filename = f"demo_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
         filepath = os.path.join(LOG_DIR, filename)
 
@@ -76,7 +119,18 @@ class KeyLoggerDemo:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
 
+        messagebox.showinfo("Info", f"Log salvato in {filepath}")
         print(f"[INFO] Log salvato in {filepath}")
+
+    def clear_text(self):
+        self.text.delete("1.0", tk.END)
+
+    def on_close(self):
+        # Salva automaticamente prima di chiudere
+        #if self.log:
+        #   self.save_log()
+        self.root.destroy()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
