@@ -6,6 +6,14 @@ import html
 LOG_DIR = os.path.join(os.path.dirname(__file__), "../logs/demo_logs")
 os.makedirs(LOG_DIR, exist_ok=True)
 
+SPECIAL_KEYS = {
+    "Control_L": "Ctrl", "Control_R": "Ctrl",
+    "Shift_L": "Shift", "Shift_R": "Shift",
+    "Alt_L": "Alt", "Alt_R": "Alt",
+    "BackSpace": "Backspace", "Return": "Enter",
+    "Tab": "Tab", "Escape": "Esc"
+}
+
 class KeyLoggerDemo:
     def __init__(self, root):
         self.root = root
@@ -18,27 +26,61 @@ class KeyLoggerDemo:
         self.save_btn.pack(pady=5)
 
     def on_key_press(self, event):
-        # Salta tasti non stampabili
-        if event.char and event.char.isprintable():
+        # Determina se è tasto stampabile o speciale
+        if event.keysym in SPECIAL_KEYS:
+            key = SPECIAL_KEYS[event.keysym]
+        elif event.char and event.char.isprintable():
             key = event.char
-            self.log.append({'time': datetime.now().isoformat(), 'key': key})
-            self.text.insert(tk.END, key)
+        else:
+            return  # ignora altri tasti invisibili
+
+        # Evita duplicazioni: inseriamo solo una volta
+        if self.log and self.log[-1]['key'] == key:
+            return
+
+        timestamp = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
+        self.log.append({'time': timestamp, 'key': key})
+
+        # Inserisci nella finestra
+        display = f"[{timestamp}] {key}\n"
+        self.text.insert(tk.END, display)
+        self.text.see(tk.END)
 
     def save_log(self):
         filename = f"demo_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
         filepath = os.path.join(LOG_DIR, filename)
-        html_content = "<html><head><title>Demo Keylogger Log</title></head><body>"
-        html_content += "<h2>Demo Keylogger Log</h2><table border='1'><tr><th>Time</th><th>Key</th></tr>"
+
+        html_content = """
+        <html>
+        <head>
+            <title>Demo Keylogger Log</title>
+            <style>
+                body { font-family: Arial, sans-serif; background-color: #1B1B2F; color: #E0E0E0; padding: 20px; }
+                h2 { color: #00C9A7; }
+                table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+                th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+                th { background-color: #162447; color: #00C9A7; }
+                tr:nth-child(even) { background-color: #1F4068; }
+                tr:nth-child(odd) { background-color: #1B1B2F; }
+            </style>
+        </head>
+        <body>
+            <h2>Demo Keylogger Log</h2>
+            <table>
+                <tr><th>Time</th><th>Key</th></tr>
+        """
+
         for entry in self.log:
             html_content += f"<tr><td>{html.escape(entry['time'])}</td><td>{html.escape(entry['key'])}</td></tr>"
+
         html_content += "</table></body></html>"
 
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
+
         print(f"[INFO] Log salvato in {filepath}")
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = KeyLoggerDemo(root)
     root.mainloop()
-# APP/demo_safe_input/app_demo.py
